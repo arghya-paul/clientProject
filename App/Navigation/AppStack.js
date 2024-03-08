@@ -2,6 +2,7 @@
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import HomePage from '../Screens/HomePage';
+import SingleChatPage from '../Screens/SingleChatPage';
 
 const Stack = createStackNavigator();
 // create a component
@@ -14,7 +15,7 @@ const AppStack = () => {
             }}
         >
             <Stack.Screen name='HomePage' component={HomePage} />
-            
+            <Stack.Screen name='SingleChatPage' component={SingleChatPage} />
         </Stack.Navigator>
     );
 };

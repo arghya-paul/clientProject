@@ -28,7 +28,7 @@ const App = () => {
  
     AuthService.getAccount()
       .then(result => {
-        console.log('result>>>>>>>>>>>>>>>>>>>>>>>', result)
+        // console.log('result>>>>>>>>>>>>>>>>>>>>>>>', result)
         if (result != null) {
           dispatch(setuser(result));
         
