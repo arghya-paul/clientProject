@@ -1,12 +1,30 @@
 //import liraries
+import { useRoute } from '@react-navigation/native';
 import React, { Component, useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, TextInput, StatusBar, TouchableOpacity } from 'react-native';
+
 
 // create a component
 const SingleChatPage = ({navigation}) => {
+    const route = useRoute()
     const [msgInputArea , setMsgInputArea] = useState('')
+    const Roomid = route.params.ROOMID
+    const Remoteid = route.params.REMOTEID
+    const RemoteDetails = route.params.DETAILS
+
+
+
+
+    const SendMessage = ()=>{
+        
+    }
+
     return (
         <View style={styles.container}>
+            <StatusBar
+            backgroundColor={'blue'}
+            barStyle={'light-content'}
+            />
             <View
             style={styles.headerView}
             >
@@ -27,11 +45,13 @@ const SingleChatPage = ({navigation}) => {
 
 
             <View
-            style={{backgroundColor:"red",
-        position:"absolute",
-        bottom:0,
-        width:'100%'
-        }}
+            style={{backgroundColor:"#DEDEDE",
+                position:"absolute",
+                bottom:0,
+                width:'100%',
+                flexDirection:'row',
+                alignItems:"center"
+                }}
             >
             <TextInput
                
@@ -40,6 +60,15 @@ const SingleChatPage = ({navigation}) => {
                 value={msgInputArea}
                 style={styles.input}
             />
+                <TouchableOpacity
+                onPress={()=>SendMessage()}
+                >
+
+            
+                    <Image source={require('../Assets/send.png')}
+                    style={styles.sendIcon}
+                    />
+             </TouchableOpacity>
             
             </View>
         </View>
@@ -78,6 +107,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius:5
       },
+      sendIcon:{
+        height:30,
+        width:30
+      }
 });
 
 //make this component available to the app

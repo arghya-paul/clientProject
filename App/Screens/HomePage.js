@@ -59,11 +59,17 @@ const HomePage = ({navigation}) => {
      .ref(`/chatlist/${userData._id}/${item.user_id}`)
      .once('value')
      .then(res=>{
-        console.log('resss>>',res);
+        // console.log('resss>>',res);
         if(res.exists()){
-            navigation.navigate(
-                'SingleChatPage'
-              );
+            let roomid = res.val().roomID
+            // console.log('rooooo>>>',roomid);
+            navigation.navigate('SingleChatPage',{
+              ROOMID:roomid,
+              REMOTEID:item.user_id,
+              DETAILS:item
+            });
+                
+             
         }else{
             StartChat(item)
         }
@@ -98,9 +104,11 @@ const HomePage = ({navigation}) => {
      .ref(`/chatlist/${item?.user_id}/${userData?._id}`)
      .set(data2)
 
-    navigation.navigate(
-        'SingleChatPage'
-      );
+     navigation.navigate('SingleChatPage',{
+      ROOMID:roomId,
+      REMOTEID:item?.user_id,
+      DETAILS:item
+    });
 
 
   }
