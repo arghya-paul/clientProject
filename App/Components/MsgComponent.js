@@ -1,187 +1,67 @@
-
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
-import {COLORS} from '../../Constants/Colors';
-import {moderateScale, verticalScale} from '../../Constants/PixelRatio';
-import {Font} from '../../Constants/FontFamily';
-import moment from 'moment';
-import {FONTS} from '../../Constants/Fonts';
-import {Icon, useTheme} from 'react-native-basic-elements';
-import NavigationService from '../../Services/Navigation';
-import RNmodal from 'react-native-modal';
-import Pdf from 'react-native-pdf';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const MsgComponent = props => {
   const {userData} = useSelector(state => state.User);
-  // console.log('userdaatattaa>>>',userData)
-  const colors = useTheme();
-  const [pdfOpen, setpdfOpen] = useState(false);
-  const {
-    sender,
-    massage,
-    roomId,
-    sendTime,
-    time,
-    tstatus,
-    image,
-    messageType,
-    onOpen,
-    type,
-    item,
-  } = props;
-
-  // console.log('itemmm>>.',item)
+  const {sender, massage} = props;
+  // console.log('message>',massage);
 
   return (
     <Pressable style={{marginVertical: 5}}>
-      {/* <View
-                style={[styles.TriangleShapeCSS,
-                sender ?
-                    styles.right
-                    :
-                    [styles.left]
-                ]}
-            /> */}
       <View
         style={{
           flexDirection: 'row',
+       
           alignSelf: sender ? 'flex-end' : 'flex-start',
         }}>
         {!sender ? (
           <Pressable
-            onPress={() =>
-              NavigationService.navigate('UserProfile', {
-                userId: item.sender_id,
-              })
-            }
+           
             style={[
               styles.time,
               {
                 flexDirection: 'row',
                 alignSelf: 'flex-end',
-                marginLeft: moderateScale(10),
-                // borderWidth:1,
-                // backgroundColor: sender ? '#C9C9C9' : '#DADADA'
+                marginLeft: 10,
               },
             ]}>
             <Image
-              source={{uri: image}}
+              source={require('../Assets/user.png')}
               style={{
-                borderRadius: 40,
+                // borderRadius: 40,
+                borderRadius:15,
+               marginBottom:8,
                 opacity: 0.8,
-                height: 40,
-                width: 40,
-                resizeMode: 'cover',
+                height: 30,
+                width: 30,
+                resizeMode: 'contain',
               }}
             />
-            {/* <View style={styles.Img}>
-              <Image source={require('../../Assets/Images/circle.png')} />
-            </View> */}
           </Pressable>
         ) : null}
 
-        {messageType == 'Image' ? (
-          <Image
-            source={{uri: massage}}
+        <View
+          style={[
+            styles.masBox,
+            {
+              // borderWidth: 1,
+              backgroundColor: sender ? 'blue' : 'grey',
+              borderBottomLeftRadius: sender ? 16 : 0,
+              borderBottomRightRadius: sender ? 0 : 16,
+            },
+          ]}>
+          <Text
             style={{
-              height: 200,
-              width: 180,
-              borderRadius: 6,
-              borderWidth: 4,
-              marginLeft: 10,
-              borderColor: COLORS.white,
-            }}
-          />
-        ) : messageType == 'Agreement' ? (
-          <>
-            <Pressable
-              onPress={() =>
-                NavigationService.navigate('AgreementSingle', {
-                  pdfdoc: massage,
-                  remoteID: props.remoteId,
-                  pdfiD: item.pdfID,
-                })
-              }
-              style={[
-                styles.pdfView,
-                {
-                  backgroundColor: sender ? COLORS.buttonColor : COLORS.dark11,
-                },
-              ]}>
-              {type == 'Agreement' ? (
-                <Text
-                  style={{
-                    color: 'grey',
-                    position: 'absolute',
-                    top: 0,
-                    left: 15,
-                    fontSize: moderateScale(12),
-                    fontFamily: FONTS.medium,
-                  }}>
-                  Agreement
-                </Text>
-              ) : null}
-
-              <Text
-                style={[
-                  styles.pdfText,
-                  {
-                    width: '70%',
-                  },
-                ]}>
-                
-              { item.profileType == 'Influencer' ? 'I have sent you an offer for your approval.' : 
-               'Thanks for your offer. I accept your offer.'
-              }
-              </Text>
-              <Icon
-                name="file-pdf-o"
-                type="FontAwesome"
-                style={styles.iconStyle}
-              />
-            </Pressable>
-          </>
-        ) : (
-          <View
-            style={[
-              styles.masBox,
-              {
-                // borderWidth: 1,
-                backgroundColor: sender ? COLORS.buttonColor
-               :
-                COLORS.gray33,
-                borderBottomLeftRadius: sender ? 16 : 0,
-                borderBottomRightRadius: sender ? 0 : 16,
-                borderWidth:massage == 'Thanks for your offer. Currently I cannot agree with your offer.' ? 
-                3:0,
-                borderColor:massage == 'Thanks for your offer. Currently I cannot agree with your offer.' ? 'red' : 'grey'
-              },
-            ]}>
-
-            <Text
-              style={{
-                paddingLeft: 5,
-                color: sender ? COLORS.white : '#0C0020',
-                fontFamily: FONTS.medium,
-                fontSize: 12,
-                lineHeight: moderateScale(15),
-                
-              }}>
-              {massage}
-            </Text>
-          </View>
-        )}
-      </View>
-      <View
-        style={{
-          alignSelf: sender ? 'flex-end' : 'flex-start',
-          marginLeft: sender ? 15 : 65,
-          marginRight: 15,
-        }}>
-        <Text style={{...styles.timeText, color: colors.primaryThemeColor}}>
-          {moment(time).format('hh:mm a')}
-        </Text>
+              paddingLeft: 5,
+              color: 'white',
+              fontSize: 14,
+              fontWeight:"700"
+             
+            }}>
+            {massage}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -200,17 +80,17 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 16,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
+   
   },
   Img: {
     position: 'absolute',
-    top:22,
-    left:22,
+    top: 22,
+    left: 22,
   },
   time: {
     alignSelf: 'flex-end',
   },
   timeText: {
-    fontFamily: 'Montserrat-Regular',
     fontSize: 7,
   },
   dayview: {
@@ -261,27 +141,27 @@ const styles = StyleSheet.create({
   },
   pdfView: {
     height: 70,
-    width:210,
-    backgroundColor: COLORS.dark11,
+    width: 210,
+    backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    // paddingHorizontal:moderateScale(6),
+    // paddingHorizontal:(6),
     borderRadius: 10,
     alignItems: 'center',
-    marginHorizontal: moderateScale(10),
+    marginHorizontal: 10,
   },
   iconStyle: {
-    marginRight: moderateScale(6),
-    fontSize: moderateScale(30),
+    marginRight: 6,
+    fontSize: 30,
     color: 'red',
-    // marginTop: moderateScale(10),
+    // marginTop: (10),
   },
   pdfText: {
-    fontSize: moderateScale(13),
-    fontFamily: FONTS.bold,
-    color: COLORS.white,
-    marginVertical: moderateScale(10),
+    fontSize: 13,
+
+    color: 'white',
+    marginVertical: 10,
     // textAlign: 'center',
   },
   BtnView: {
@@ -293,17 +173,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   Btn: {
-    height: verticalScale(40),
-    width: moderateScale(80),
+    height: 40,
+    width: 80,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.primaryThemeColor,
+    backgroundColor: 'white',
     borderRadius: 30,
   },
   btnText: {
-    fontSize: moderateScale(14),
-    fontFamily: FONTS.bold,
-    color: COLORS.white,
+    fontSize: 14,
+    color: 'white',
   },
 });
 
