@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import SimpleToast from 'react-native-simple-toast';
@@ -21,9 +22,14 @@ const HomePage = ({navigation}) => {
   const {userData} = useSelector(state => state.User);
   const [allUsers, setAllUsers] = useState([]);
   const [userLoader, setUserLoader] = useState(true);
+  const [refressing, setRefressing] = useState(false);
 
 //   console.log('useriddd>>>',userData);
-
+const onRefresh = async () => {
+  setRefressing(true)
+  GetAllUsers()
+  setRefressing(false)
+};
 
   useEffect(() => {
     getAccountDetails();
@@ -43,15 +49,27 @@ const HomePage = ({navigation}) => {
   const GetAllUsers = () => {
     database()
       .ref('/users/')
-      .once('value')
-      .then(res => {
-        if (res.exists()) {
-          let data = Object.values(res.val());
-          let filterData = data.filter(it => it.user_id != userData._id);
-          setAllUsers(filterData);
-          setUserLoader(false)
+      // .once('value')
+      // .then(res => {
+      //   if (res.exists()) {
+      //     let data = Object.values(res.val());
+      //     let filterData = data.filter(it => it.user_id != userData._id);
+      //     setAllUsers(filterData);
+      //     setUserLoader(false)
+      //   }
+      // })
+      .on('value', snapshot => {
+        if (snapshot.exists()) {
+          let data = Object.values(snapshot.val());
+              let filterData = data.filter(it => it.user_id != userData._id);
+              setAllUsers(filterData);
+              setUserLoader(false)
+        } else {
+    
         }
       });
+
+      
   };
 
   const ChatInitiate = (item) => {
@@ -120,7 +138,11 @@ const HomePage = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+    refreshControl={
+      <RefreshControl refreshing={refressing} onRefresh={onRefresh} />
+    }
+    style={styles.container}>
       <View style={styles.headerView}>
         <Text
           style={[
@@ -141,11 +163,11 @@ const HomePage = ({navigation}) => {
           Hellow {userData?.name}
         </Text>
       </View>
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <View style={styles.chatView}>
           <Text style={styles.textStyle}>Go to my Chatlist</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Text
         style={[
@@ -226,11 +248,11 @@ const styles = StyleSheet.create({
 
   headerView: {
     backgroundColor: 'blue',
-    width: '70%',
     alignSelf: 'center',
     marginVertical: 40,
     borderRadius: 5,
-    height: 60,
+    paddingVertical:15,
+    paddingHorizontal:15,
     alignItems: 'center',
     justifyContent: 'center',
   },

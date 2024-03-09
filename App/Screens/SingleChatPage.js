@@ -40,14 +40,14 @@ const SingleChatPage = ({navigation}) => {
   const FetchChats = () => {
     database()
       .ref(`/Chat/${Roomid}/messages`)
-      .once('value')
-      .then(res => {
-        if (res.exists()) {
-          setAllChats(Object.values(res.val()));
+      .on('value', snapshot => {
+        if (snapshot.exists()) {
+          console.log('Object.values(snapshot.val())', snapshot.val());
+          setAllChats(Object.values(snapshot.val()));
+  
+        } else {
+    
         }
-      })
-      .catch(errr => {
-        console.log('errr>', errr);
       });
   };
 
@@ -72,7 +72,7 @@ const SingleChatPage = ({navigation}) => {
 
     database().ref(`/Chat/${Roomid}/messages/`).push(smsdata);
 
-    FetchChats(Roomid);
+    FetchChats();
     setMsgInputArea('');
   };
 

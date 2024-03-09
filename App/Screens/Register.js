@@ -33,6 +33,11 @@ const Register = ({navigation}) => {
             return false
         }
 
+        if(password.length < 6){
+            SimpleToast.show('Password should be minimum of 6 characters',SimpleToast.SHORT)
+            return false
+        }
+
 
         setLoader(true)
         auth()
@@ -96,12 +101,14 @@ const Register = ({navigation}) => {
            placeholder="Enter Email"
            keyboardType='email-address'
            autoCapitalize='none'
+           placeholderTextColor={'grey'}
        />
 
         <TextInput
            style={[styles.input,{
                marginBottom:40
            }]}
+           placeholderTextColor={'grey'}
            onChangeText={(val)=>setPassword(val)}
            value={password}
            placeholder="Enter Password"
@@ -149,7 +156,8 @@ const styles = StyleSheet.create({
         margin: 12,
         borderWidth: 1,
         padding: 10,
-        borderRadius:5
+        borderRadius:5,
+        color:'black'
       },
       btn:{
         width:"80%",
