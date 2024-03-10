@@ -49,15 +49,6 @@ const onRefresh = async () => {
   const GetAllUsers = () => {
     database()
       .ref('/users/')
-      // .once('value')
-      // .then(res => {
-      //   if (res.exists()) {
-      //     let data = Object.values(res.val());
-      //     let filterData = data.filter(it => it.user_id != userData._id);
-      //     setAllUsers(filterData);
-      //     setUserLoader(false)
-      //   }
-      // })
       .on('value', snapshot => {
         if (snapshot.exists()) {
           let data = Object.values(snapshot.val());
@@ -75,23 +66,38 @@ const onRefresh = async () => {
   const ChatInitiate = (item) => {
      database()
      .ref(`/chatlist/${userData._id}/${item.user_id}`)
-     .once('value')
-     .then(res=>{
-        // console.log('resss>>',res);
-        if(res.exists()){
-            let roomid = res.val().roomID
+     .on('value', snapshot => {
+      if (snapshot.exists()) {
+        let roomid = snapshot.val().roomID
             // console.log('rooooo>>>',roomid);
             navigation.navigate('SingleChatPage',{
               ROOMID:roomid,
               REMOTEID:item.user_id,
               DETAILS:item
             });
+      } else {
+        StartChat(item)
+      }
+    });
+
+
+    //  .on('value')
+    //  .then(res=>{
+    //     // console.log('resss>>',res);
+    //     if(res.exists()){
+    //         let roomid = res.val().roomID
+    //         // console.log('rooooo>>>',roomid);
+    //         navigation.navigate('SingleChatPage',{
+    //           ROOMID:roomid,
+    //           REMOTEID:item.user_id,
+    //           DETAILS:item
+    //         });
                 
              
-        }else{
-            StartChat(item)
-        }
-     })
+    //     }else{
+    //         StartChat(item)
+    //     }
+    //  })
 
   };
 
